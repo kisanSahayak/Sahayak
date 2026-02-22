@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: farmer_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: farmer_scheme_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./prisma/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Frontend + Backend
+  web:
+    build: .
+    container_name: farmer_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/farmer_scheme_db
+      JWT_SECRET: change-this-secret-in-production-use-32-plus-chars
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      OCR_SERVICE_URL: http://ocr:8000
+    volumes:
+      - uploads_data:/app/public/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Python OCR Service (plug in your app here)
+  # ocr:
+  #   build: ../ocr-service          # path to your Python OCR project
+  #   container_name: farmer_ocr
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #   volumes:
+  #     - uploads_data:/app/uploads:ro  # OCR reads the same uploads
+
+volumes:
+  postgres_data:
+  uploads_data:
