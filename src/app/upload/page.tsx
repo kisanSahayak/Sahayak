@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/Footer'
+import Footer from '@/components/layout/Footer'
 
 const STATES = [
   'Andhra Pradesh', 'Bihar', 'Chhattisgarh', 'Gujarat', 'Haryana',

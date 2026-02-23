@@ -1,0 +1,144 @@
+.login-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2.5rem;
+    padding: 2rem 0;
+}
+
+/* LEFT INFO CARD */
+.login-info-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid #d7dbe2;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.login-info-card h2 {
+    font-size: 1.7rem;
+    color: #0a4fa3;
+    margin-bottom: 1rem;
+}
+
+.info-desc {
+    color: #475569;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.info-list li {
+    margin-bottom: 0.7rem;
+    font-size: 0.98rem;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* RIGHT LOGIN BOX */
+.login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid #d7dbe2;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.login-box h3 {
+    font-size: 1.4rem;
+    color: #083c7a;
+    margin-bottom: 1.2rem;
+}
+
+/* FORM */
+.form-label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.phone-group {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 0.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #d7dbe2;
+}
+
+.phone-group span {
+    padding: 0 0.5rem;
+    font-weight: 600;
+    color: #0a4fa3;
+}
+
+.phone-group input {
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    width: 100%;
+    background: transparent;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.65rem;
+    border-radius: 8px;
+    border: 1px solid #d7dbe2;
+    outline: none;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.form-input:focus,
+.phone-group:focus-within {
+    border-color: #0a4fa3;
+    box-shadow: 0 0 3px rgba(0, 80, 180, 0.25);
+}
+
+/* BUTTON */
+.btn-primary {
+    background: #0a4fa3;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    transition: 0.25s;
+}
+
+.btn-primary:hover {
+    background: #083c7a;
+}
+
+/* LOGIN LINKS */
+.login-links {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.login-links a {
+    color: #0a4fa3;
+    font-weight: 600;
+}
+
+/* SECURITY NOTE */
+.security-note {
+    margin-top: 1.2rem;
+    font-size: 0.88rem;
+    color: #6b7280;
+    background: #fff8d6;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #f5e6a4;
+}
+
+.error-box {
+    background: #ffe8e8;
+    color: #b40000;
+    padding: 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #f3baba;
+    margin-bottom: 1rem;
+}

@@ -1,0 +1,8 @@
+footer * {
+    all: unset;
+    display: revert;
+}
+
+footer {
+    all: revert;
+}
