@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { getAuthUser } from '@/lib/auth'
 import { query } from '@/lib/db'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/Footer'
+import Footer from '@/components/layout/Footer'
 import { STATUS_COLORS, STATUS_LABELS, DOCUMENT_TYPE_LABELS } from '@/types'
 import type { Document, Notification } from '@/types'
 

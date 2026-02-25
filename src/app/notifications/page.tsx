@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Header from '@/components/layout/Header'
-import Footer from '@/components/Footer'
+import Footer from '@/components/layout/Footer'
 import type { Notification } from '@/types'
 
 const TYPE_STYLES: Record<string, { icon: string; bg: string; border: string }> = {

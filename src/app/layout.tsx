@@ -1,25 +1,13 @@
-import type { Metadata } from 'next'
-import './globals.css'
-
-export const metadata: Metadata = {
-  title: 'Kisan Shyok Portal | Government of India',
-  description: 'Official portal for farmer registration, scheme access and application tracking',
-}
+import "./globals.css";
+import Footer from "@/components/layout/Footer";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        {/* OLD GOV STYLE → minimal font loading */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Arial&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-
-      <body className="gov-body">
-        {children}
+      <body className="min-h-screen flex flex-col bg-govLight">
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
-  )
+  );
 }

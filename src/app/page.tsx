@@ -1,146 +1,153 @@
-import Link from 'next/link'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/Footer'
-
-const CORNER_CARDS = [
-  { title: 'New Farmer Registration', desc: 'Create your account to access all government schemes', href: '/register', accent: true },
-  { title: 'Upload Documents', desc: 'Submit land records, Aadhaar, bank passbook for verification', href: '/upload', accent: false },
-  { title: 'Track Application Status', desc: 'View the status of your submitted documents and applications', href: '/dashboard', accent: false },
-  { title: 'Notifications & Alerts', desc: 'Check updates, approvals and scheme recommendations', href: '/notifications', accent: false },
-]
-
-const STATS = [
-  { label: 'Registered Farmers', value: '12,48,532' },
-  { label: 'Schemes Available', value: '24' },
-  { label: 'Documents Verified', value: '8,94,210' },
-  { label: 'Benefits Disbursed', value: 'Rs. 2,840 Cr' },
-]
-
-const REQUIRED_DOCS = [
-  'Land Record / Khatoni',
-  'Aadhaar Card (both sides)',
-  'Bank Passbook / Cancelled Cheque',
-  'Income Certificate',
-  'Caste Certificate (if applicable)',
-  'Passport Size Photograph',
-]
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="page-wrapper">
+    <div className="min-h-screen flex flex-col bg-gray-100">
+
+      {/* Header */}
       <Header />
 
-      <main>
-        {/* Stats */}
-        <div className="stats-strip">
-          <div className="content-area stats-grid">
-            {STATS.map((s) => (
-              <div key={s.label} className="stat-box">
-                <div className="stat-value">{s.value}</div>
-                <div className="stat-label">{s.label}</div>
-              </div>
-            ))}
+      {/* 🔔 Blinking Important Notice */}
+      <div className="w-full bg-yellow-100 border-t border-b border-yellow-400 py-2">
+        <p className="text-center text-sm font-semibold text-red-700 blink">
+          <span className="font-bold">Important: </span>
+          eKYC is MANDATORY for all registered farmers. OTP-based eKYC is available on this portal.
+        </p>
+      </div>
+
+      {/* 📊 STATISTICS GRID — Updated */}
+      <div className="w-full max-w-5xl mx-auto mt-4 grid grid-cols-2 md:grid-cols-4 border border-gray-300 rounded-lg overflow-hidden shadow-sm bg-white">
+        {[
+          ["12,48,532", "Registered Farmers"],
+          ["24", "Schemes Available"],
+          ["8,94,210", "Documents Verified"],
+          ["₹ 2,840 Cr", "Benefits Disbursed"],
+        ].map(([value, label], index) => (
+          <div
+            key={label}
+            className={`text-center py-4 flex flex-col justify-center border-gray-300 
+                        ${index !== 3 ? "border-r" : ""} 
+                        ${index < 2 ? "md:border-b md:border-r" : ""} 
+                        md:border-b-0`}
+          >
+            <p className="text-xl font-extrabold text-blue-900">{value}</p>
+            <p className="text-xs text-gray-600">{label}</p>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Notice */}
-        <div className="notice-bar">
-          <div className="content-area">
-            <p>
-              <strong>Important:</strong> eKYC is MANDATORY for all registered farmers. OTP-based eKYC is available on this portal.
-            </p>
-          </div>
-        </div>
+      <main className="flex-1 max-w-6xl mx-auto px-4">
 
-        {/* Main */}
-        <div className="content-area main-grid">
+        {/* 2 Column Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          {/* LEFT */}
-          <div className="left-col">
+          {/* LEFT SECTION */}
+          <div className="md:col-span-2 space-y-4">
 
             {/* Farmer Corner */}
-            <div className="section-box">
-              <div className="section-heading">Farmer's Corner</div>
+            <section className="bg-white shadow border rounded">
+              <h3 className="bg-blue-100 font-semibold text-sm px-4 py-2 border-b text-blue-900">
+                Farmer’s Corner
+              </h3>
 
-              <div className="corner-grid">
-                {CORNER_CARDS.map((card) => (
+              <div className="grid grid-cols-2">
+                {[
+                  ["New Farmer Registration", "/register"],
+                  ["Upload Documents", "/upload"],
+                  ["Track Application Status", "/dashboard"],
+                  ["Notifications & Alerts", "/notifications"],
+                ].map(([title, link], i) => (
                   <Link
-                    key={card.title}
-                    href={card.href}
-                    className={`corner-card ${card.accent ? 'accent' : ''}`}
+                    key={title}
+                    href={link}
+                    className={`p-4 border text-sm hover:bg-blue-50 
+                                ${i === 0 ? "bg-blue-900 text-white" : ""}`}
                   >
-                    <div className="corner-title">{card.title}</div>
-                    <div className="corner-desc">{card.desc}</div>
+                    {title}
                   </Link>
                 ))}
               </div>
-            </div>
+            </section>
 
-            {/* How it works */}
-            <div className="section-box">
-              <div className="section-heading">How It Works</div>
+            {/* How It Works */}
+            <section className="bg-white shadow border rounded">
+              <h3 className="bg-blue-100 font-semibold text-sm px-4 py-2 border-b text-blue-900">
+                How It Works
+              </h3>
 
-              <div className="steps-grid">
+              <div className="grid grid-cols-4 text-center text-sm">
                 {[
-                  { num: '01', title: 'Register', desc: 'Create your farmer account' },
-                  { num: '02', title: 'Upload', desc: 'Submit documents' },
-                  { num: '03', title: 'Verify', desc: 'System verifies records' },
-                  { num: '04', title: 'Apply', desc: 'Get scheme benefits' },
-                ].map((step) => (
-                  <div key={step.num} className="step-box">
-                    <div className="step-num">{step.num}</div>
-                    <div className="step-title">{step.title}</div>
-                    <div className="step-desc">{step.desc}</div>
+                  ["01", "Register"],
+                  ["02", "Upload"],
+                  ["03", "Verify"],
+                  ["04", "Apply"],
+                ].map(([num, text]) => (
+                  <div key={num} className="p-4 border-r last:border-r-0">
+                    <p className="text-lg font-bold text-gray-400">{num}</p>
+                    <p className="font-semibold text-blue-900">{text}</p>
                   </div>
                 ))}
               </div>
-            </div>
-
+            </section>
           </div>
 
-          {/* RIGHT */}
-          <div className="right-col">
+          {/* RIGHT SECTION */}
+          <div className="space-y-4">
 
-            {/* Login */}
-            <div className="section-box">
-              <div className="section-heading">Farmer Login</div>
+            {/* Login Box */}
+            <section className="bg-white shadow border rounded p-4">
+              <h3 className="bg-blue-100 font-semibold text-sm px-4 py-2 border-b -mx-4 mb-4 text-blue-900">
+                Farmer Login
+              </h3>
 
-              <div className="sidebar-box">
-                <p>Login to access dashboard and track applications.</p>
+              <p className="text-sm text-gray-700 mb-3">
+                Login to access your dashboard, track applications, and more.
+              </p>
 
-                <Link href="/login" className="btn-primary full">
-                  Login to Portal
-                </Link>
+              <Link
+                href="/login"
+                className="block w-full bg-blue-900 text-center text-white py-2 text-sm font-semibold rounded hover:bg-blue-800"
+              >
+                Login to Portal
+              </Link>
 
-                <Link href="/register" className="btn-outline full">
-                  New Registration
-                </Link>
-              </div>
-            </div>
+              <Link
+                href="/register"
+                className="block w-full mt-2 border border-blue-900 text-center text-blue-900 py-2 text-sm font-semibold rounded hover:bg-blue-50"
+              >
+                New Registration
+              </Link>
+            </section>
 
-            {/* Documents */}
-            <div className="section-box">
-              <div className="section-heading">Required Documents</div>
+            {/* Required Documents */}
+            <section className="bg-white shadow border rounded p-4">
+              <h3 className="bg-blue-100 font-semibold text-sm px-4 py-2 border-b -mx-4 mb-4 text-blue-900">
+                Required Documents
+              </h3>
 
-              <ul className="clean-list">
-                {REQUIRED_DOCS.map((doc) => (
-                  <li key={doc}>{doc}</li>
+              <ul className="text-sm space-y-2 text-gray-700">
+                {[
+                  "Land Record / Khatoni",
+                  "Aadhaar Card (both sides)",
+                  "Bank Passbook / Cancelled Cheque",
+                  "Income Certificate",
+                  "Caste Certificate (if applicable)",
+                  "Passport Size Photograph",
+                ].map((doc) => (
+                  <li key={doc} className="border-b pb-1">{doc}</li>
                 ))}
               </ul>
-            </div>
-
-            {/* Helpline */}
-            <div className="helpline-box">
-              <div className="help-title">Helpline</div>
-              <div className="help-number">1800-XXX-XXXX</div>
-              <div className="help-sub">Toll Free (9 AM - 6 PM)</div>
-            </div>
+            </section>
 
           </div>
+
         </div>
       </main>
 
-      <Footer />
+      {/* Footer */}
+      {/* <Footer /> */}
     </div>
-  )
+  );
 }
