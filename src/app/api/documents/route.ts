@@ -40,7 +40,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
@@ -49,7 +48,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file size (5MB max)
     const MAX_SIZE = 5 * 1024 * 1024
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
@@ -58,7 +56,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save file to disk
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', user.userId)
     await mkdir(uploadDir, { recursive: true })
 
@@ -70,8 +67,8 @@ export async function POST(request: NextRequest) {
     await writeFile(filePath, Buffer.from(bytes))
 
     const relativePath = `/uploads/${user.userId}/${uniqueFileName}`
+    const absolutePath = filePath
 
-    // Save to DB
     const [doc] = await query<{ id: string; status: string }>(
       `INSERT INTO documents (user_id, doc_type, file_name, file_path, file_size, mime_type, status)
        VALUES ($1, $2, $3, $4, $5, $6, 'pending')
@@ -79,7 +76,6 @@ export async function POST(request: NextRequest) {
       [user.userId, doc_type, file.name, relativePath, file.size, file.type]
     )
 
-    // Create notification
     await query(
       `INSERT INTO notifications (user_id, title, message, type, link)
        VALUES ($1, $2, $3, $4, $5)`,
@@ -92,9 +88,23 @@ export async function POST(request: NextRequest) {
       ]
     )
 
-    // TODO: Trigger OCR service when ready
-    // await triggerOCR(doc.id, relativePath)
-
+    // Trigger OCR
+    fetch("http://localhost:8000/process-path", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    document_id: doc.id,
+    user_id: user.userId,
+    doc_type: doc_type,
+    file_path: absolutePath,
+  }),
+})
+  .then(res => res.json())
+  .then(data => console.log("OCR started:", data))
+  .catch(err => console.error("OCR error:", err))
+  
     return NextResponse.json({
       success: true,
       message: 'Document uploaded successfully',

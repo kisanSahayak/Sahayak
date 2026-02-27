@@ -33,6 +33,38 @@ export default function RegisterPage() {
     setError("");
   };
 
+const handleSubmit = async (e: any) => {
+  e.preventDefault();
+
+  if (form.password !== form.confirm_password) {
+    setError("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      setError(data.error);
+      return;
+    }
+
+    alert("Registered successfully!");
+    window.location.href = "/";
+
+  } catch (err) {
+    setError("Something went wrong");
+  }
+};
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
 
@@ -49,7 +81,7 @@ export default function RegisterPage() {
           New Farmer Registration Form
         </h1>
 
-        <div className="bg-white border shadow rounded-lg p-6">
+        <form onSubmit={handleSubmit} className="bg-white border shadow rounded-lg p-6">
 
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
@@ -160,12 +192,13 @@ export default function RegisterPage() {
 
           {/* Submit */}
           <button
-            className="bg-blue-900 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-blue-800"
-          >
+  type="submit"
+  className="bg-blue-900 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-blue-800"
+>
             Submit Registration
           </button>
 
-        </div>
+        </form>
       </main>
 
       <Footer />

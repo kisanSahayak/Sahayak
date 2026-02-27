@@ -163,7 +163,7 @@ export default async function DashboardPage() {
                     </div>
                     <div>
                       <div className="font-semibold text-gov-text">{profile?.full_name}</div>
-                      <div className="text-xs text-gov-text-light">📱 +91 {profile?.phone}</div>
+                      <div className="text-xs text-gov-text-light"> +91 {profile?.phone}</div>
                     </div>
                   </div>
 
@@ -196,7 +196,7 @@ export default async function DashboardPage() {
                       <div key={n.id} className={`px-5 py-3 ${!n.is_read ? 'bg-blue-50' : ''}`}>
                         <div className="flex items-start gap-2">
                           <span className="text-sm mt-0.5">
-                            {n.type === 'success' ? '✅' : n.type === 'warning' ? '⚠️' : n.type === 'error' ? '❌' : 'ℹ️'}
+                            {n.type === 'success' ? '' : n.type === 'warning' ? '⚠️' : n.type === 'error' ? '❌' : 'ℹ️'}
                           </span>
                           <div>
                             <p className="text-xs font-semibold text-gov-text">{n.title}</p>
