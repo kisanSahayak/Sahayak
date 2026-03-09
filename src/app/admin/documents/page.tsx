@@ -121,7 +121,7 @@ export default function AdminDocumentsPage() {
                 }}>
                   View Farmer
                 </Link>
-                {status === "ocr_done" || status === "pending" ? (
+                {(status === "ocr_done" || status === "pending") ? (
                   <>
                     <button
                       onClick={() => handleAction(doc.id, 'verify')}

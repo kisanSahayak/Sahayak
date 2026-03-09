@@ -4,10 +4,10 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
 const NAV = [
-  { href: "/admin", label: "Dashboard", icon: "📊" },
-  { href: "/admin/farmers", label: "Farmers", icon: "👨‍🌾" },
-  { href: "/admin/documents", label: "Documents", icon: "📄" },
-  { href: "/admin/applications", label: "Applications", icon: "📋" },
+  { href: "/admin", label: "Dashboard"},
+  { href: "/admin/farmers", label: "Farmers"},
+  { href: "/admin/documents", label: "Documents"},
+  { href: "/admin/applications", label: "Applications"},
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -57,7 +57,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 borderLeft: active ? "3px solid #3b82f6" : "3px solid transparent",
                 transition: "all 0.15s",
               }}>
-                <span>{item.icon}</span>
                 {item.label}
               </Link>
             )

@@ -108,7 +108,7 @@ export default function AdminApplicationsPage() {
                   </div>
                   <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "2px" }}>
                     Applied {new Date(app.applied_at).toLocaleDateString('en-IN')}
-                    {app.benefit_amount && ` · Benefit: ₹${parseInt(app.benefit_amount).toLocaleString('en-IN')}`}
+                    {app.benefit_amount && ` · Benefit: ${app.benefit_amount}`}
                   </div>
 
                   {/* Passed rules */}
