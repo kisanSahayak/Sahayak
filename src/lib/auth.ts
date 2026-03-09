@@ -29,17 +29,30 @@ export async function verifyToken(token: string): Promise<JWTPayload | null> {
   }
 }
 
-export function setAuthCookie(token: string) {
-  cookies().set('auth_token', token, {
+// Set cookie based on user role
+export function setAuthCookie(token: string, role: string) {
+  const cookieName = role === 'admin' ? 'admin_session' : 'farmer_session'
+  
+  // Set the role-specific cookie
+  cookies().set(cookieName, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 7, // 7 days
     path: '/',
   })
-}
-
-export function clearAuthCookie() {
+  
+  // Clear the other role's cookie to prevent conflicts
+  const otherCookie = role === 'admin' ? 'farmer_session' : 'admin_session'
+  cookies().set(otherCookie, '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+    path: '/',
+  })
+  
+  // Also clear the old auth_token for backward compatibility
   cookies().set('auth_token', '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -49,8 +62,92 @@ export function clearAuthCookie() {
   })
 }
 
+// Clear all auth cookies
+export function clearAuthCookies() {
+  cookies().set('farmer_session', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+    path: '/',
+  })
+  
+  cookies().set('admin_session', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+    path: '/',
+  })
+  
+  cookies().set('auth_token', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+    path: '/',
+  })
+}
+
+// Get the current authenticated user
 export async function getAuthUser(): Promise<JWTPayload | null> {
-  const token = cookies().get('auth_token')?.value
+  // Check for farmer session first
+  const farmerToken = cookies().get('farmer_session')?.value
+  if (farmerToken) {
+    const payload = await verifyToken(farmerToken)
+    if (payload) return payload
+  }
+  
+  // Then check for admin session
+  const adminToken = cookies().get('admin_session')?.value
+  if (adminToken) {
+    const payload = await verifyToken(adminToken)
+    if (payload) return payload
+  }
+  
+  // Fallback to old auth_token for backward compatibility
+  const oldToken = cookies().get('auth_token')?.value
+  if (oldToken) {
+    const payload = await verifyToken(oldToken)
+    if (payload) {
+      // Migrate to new cookie format
+      setAuthCookie(oldToken, payload.role)
+      return payload
+    }
+  }
+  
+  return null
+}
+
+// Check if a specific type of user is logged in
+export async function checkFarmerAuth(): Promise<JWTPayload | null> {
+  const token = cookies().get('farmer_session')?.value
   if (!token) return null
-  return verifyToken(token)
+  const payload = await verifyToken(token)
+  if (payload && payload.role === 'farmer') return payload
+  return null
+}
+
+export async function checkAdminAuth(): Promise<JWTPayload | null> {
+  const token = cookies().get('admin_session')?.value
+  if (!token) return null
+  const payload = await verifyToken(token)
+  if (payload && payload.role === 'admin') return payload
+  return null
+}
+
+export async function getUserRole(): Promise<'admin' | 'farmer' | null> {
+  const farmerToken = cookies().get('farmer_session')?.value
+  if (farmerToken) {
+    const payload = await verifyToken(farmerToken)
+    if (payload && payload.role === 'farmer') return 'farmer'
+  }
+  
+  const adminToken = cookies().get('admin_session')?.value
+  if (adminToken) {
+    const payload = await verifyToken(adminToken)
+    if (payload && payload.role === 'admin') return 'admin'
+  }
+  
+  return null
 }

@@ -41,19 +41,32 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Sign JWT and set cookie
+    // Sign JWT
     const token = await signToken({
       userId: user.id,
       phone: user.phone,
       role: user.role,
       fullName: user.full_name,
     })
-    setAuthCookie(token)
+    
+    // Set the cookie based on user role
+    // The updated setAuthCookie function will handle:
+    // - Setting role-specific cookie (farmer_session or admin_session)
+    // - Clearing the other role's cookie
+    // - Removing old auth_token for backward compatibility
+    setAuthCookie(token, user.role)
+
+    // Log for debugging
+    console.log(`Login successful for ${user.role}: ${user.full_name}`)
 
     return NextResponse.json({
       success: true,
       message: 'Login successful',
-      data: { userId: user.id, fullName: user.full_name, role: user.role },
+      data: { 
+        userId: user.id, 
+        fullName: user.full_name, 
+        role: user.role 
+      },
     })
   } catch (error) {
     console.error('Login error:', error)

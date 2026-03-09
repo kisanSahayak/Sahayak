@@ -6,7 +6,7 @@ import { signToken, setAuthCookie } from '@/lib/auth'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { full_name, phone, email, password, state, district, village, land_area_acres } = body
+    const { full_name, phone, email, password, state, district, village, land_area_acres, aadhaar_last4 } = body
 
     // Validate required fields
     if (!full_name || !phone || !password) {
@@ -37,10 +37,10 @@ export async function POST(request: NextRequest) {
 
     // Insert user
     const [user] = await query<{ id: string; full_name: string; role: string }>(
-      `INSERT INTO users (full_name, phone, email, password_hash, state, district, village, land_area_acres)
+      `INSERT INTO users (full_name, phone, email, password_hash, state, district, village, land_area_acres, aadhaar_last4)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING id, full_name, role`,
-      [full_name, phone, email || null, password_hash, state || null, district || null, village || null, land_area_acres || null]
+      [full_name, phone, email || null, password_hash, state || null, district || null, village || null, land_area_acres || null, aadhaar_last4 || null]
     )
 
     // Create welcome notification
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
       message: 'Account created successfully',
       data: { userId: user.id, fullName: user.full_name },
     })
+    
   } catch (error) {
     console.error('Register error:', error)
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 })
